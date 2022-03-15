@@ -1,5 +1,5 @@
 <template>
-  <input @blur="handleChange" v-model="usernameValue" type="text" />
+  <input v-on="validationListeners" v-model="usernameValue" type="text" />
   <p v-if="usernameError">{{ usernameError }}</p>
 
   <pre>
@@ -21,11 +21,18 @@ const validationSchema = z.object({
 });
 
 const validationListeners = computed(() => {
-  if (!errorMessage.value) {
+  //  Validation douce si pas encore d'erreur :
+  if (!usernameError.value) {
     return {
       blur: handleChange,
       change: handleChange,
-      input: (e) => handleChange(e, false),
+    };
+  } else {
+    //  Validation agressive en cas d'erreur :
+    return {
+      blur: handleChange,
+      change: handleChange,
+      input: handleChange,
     };
   }
 });
